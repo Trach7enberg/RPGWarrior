@@ -1,0 +1,20 @@
+Binaries
+DerivedDataCache
+Intermediate
+Saved
+# 以下不上传到GITHUB,容量太大
+/Content/Assets/
+/Content/Maps/
+/Content/NiagaraMagicalSlashes/
+/Content/SwordEffects/
+#
+.vscode
+.vs
+*.VC.db
+*.opensdf
+*.opendb
+*.sdf
+*.sln
+*.suo
+*.xcodeproj
+*.xcworkspace
