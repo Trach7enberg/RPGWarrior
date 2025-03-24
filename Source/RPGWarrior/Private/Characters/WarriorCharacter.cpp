@@ -15,6 +15,7 @@
 #include "DataAssets/DataAssetInputConfig.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "HUD/BaseWarriorHUD.h"
 #include "RPGWarrior/RPGWarrior.h"
 
 DEFINE_LOG_CATEGORY_STATIC(WarriorCharacterLog, All, All);
@@ -100,6 +101,16 @@ void AWarriorCharacter::PossessedBy(AController* NewController)
 		WarriorAbilitySysComp->GiveInitialAbilities(Asset->HeroStartupAbilities);
 		WarriorAbilitySysComp->ApplyInitialGameplayEffect(Asset->StartupGameplayEffect);
 	}
+	
+	HeroUIComp->BindAttributeChangeCallBack();
+
+	const auto Local = Cast<APlayerController>(NewController);
+	if (!Local){return;}
+	
+	const auto Hud = Local->GetHUD<ABaseWarriorHUD>();
+	if (!Hud){return;}
+	
+	Hud->InitHud();
 }
 
 void AWarriorCharacter::OnRep_PlayerState() { Super::OnRep_PlayerState(); }
@@ -148,8 +159,6 @@ void AWarriorCharacter::EnableCombatDetect(const bool bShouldEnable)
 
 void AWarriorCharacter::EnemyDied() {}
 
-UPawnUIComponent* AWarriorCharacter::GetPawnUIComponent()
-{
-	return HeroUIComp;
-	
-}
+UPawnUIComponent* AWarriorCharacter::GetPawnUIComponent() { return HeroUIComp; }
+
+UHeroUIComponent* AWarriorCharacter::GetHeroUIComponent() { return HeroUIComp; }

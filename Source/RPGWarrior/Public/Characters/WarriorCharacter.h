@@ -47,6 +47,7 @@ public:
 
 	//~ Begin IPawnUiInterface 
 	virtual UPawnUIComponent* GetPawnUIComponent() override;
+	virtual UHeroUIComponent* GetHeroUIComponent() override;
 	//~ End IPawnUiInterface
 
 #pragma endregion
