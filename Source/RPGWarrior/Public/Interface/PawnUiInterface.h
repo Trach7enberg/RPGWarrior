@@ -6,6 +6,8 @@
 #include "UObject/Interface.h"
 #include "PawnUiInterface.generated.h"
 
+class UEnemyUIComponent;
+class UHeroUIComponent;
 class UPawnUIComponent;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
@@ -25,6 +27,12 @@ class RPGWARRIOR_API IPawnUiInterface
 public:
 	/// 用于处理角色UI相关内容的组件
 	/// @return 
-	UFUNCTION(BlueprintCallable, Category="PawnUiInterface")
+	UFUNCTION(BlueprintCallable, Category="PawnUi")
 	virtual UPawnUIComponent* GetPawnUIComponent() = 0;
+
+	UFUNCTION(BlueprintCallable, Category="PawnUi")
+	virtual UHeroUIComponent* GetHeroUIComponent();
+
+	UFUNCTION(BlueprintCallable, Category="PawnUi")
+	virtual UEnemyUIComponent* GetEnemyUIComponent();
 };
