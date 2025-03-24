@@ -10,8 +10,9 @@
  * 
  */
 UCLASS()
-class RPGWARRIOR_API UEnemyUIComponent : public UHeroUIComponent
+class RPGWARRIOR_API UEnemyUIComponent : public UPawnUIComponent
 {
 	GENERATED_BODY()
-	
+
+
 };
