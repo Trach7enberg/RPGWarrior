@@ -3,16 +3,18 @@
 
 #include "AbilitySystem/Abilities/HeroEquippedGameplayAbility.h"
 
+#include "Characters/WarriorCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/WarriorAbilitySysComp.h"
 #include "Animation/Hero/WarriorHeroLinkedAnimLayer.h"
 #include "Component/Combat/HeroCombatComp.h"
+#include "Component/UI/HeroUIComponent.h"
 #include "Controllers/WarriorController.h"
+#include "Interface/PawnUiInterface.h"
 #include "Items/Weapons/WarriorHeroWeapon.h"
 
 void UHeroEquippedGameplayAbility::Equipped(const FGameplayTag InTag, const FName InSocketName)
 {
-	const auto at             = K2_HasAuthority();
 	const auto OwnerMesh      = GetOwningComponentFromActorInfo();
 	const auto HeroCombatComp = GetHeroCombatCompFromActorInfo();
 	const auto HeroController = GetHeroControllerFromActorInfo();
@@ -32,11 +34,11 @@ void UHeroEquippedGameplayAbility::Equipped(const FGameplayTag InTag, const FNam
 
 	// 设置武器组件当前持有武器的标签,才会切换到主动画蓝图中的装备动画 很关键
 	HeroCombatComp->SetCurrentWeaponTag(InTag);
-	
+
 	// 授予当前武器所附带的默认能力,并存储其SpecHandle用于取消
 	HeroAsc->GiveInitialAbilities(WantEquipWeapon->WeaponData.WeaponDefaultAbilities,
-								  WantEquipWeapon->GetGrantedAbilitySpecHandles(),
-								  GetAbilityLevel());
+	                              WantEquipWeapon->GetGrantedAbilitySpecHandles(),
+	                              GetAbilityLevel());
 
 	// 覆盖原来的能力输入映射 [仅在客户端运行,服务端无法运行]
 	if (const auto InputSubSystem = ULocalPlayer::GetSubsystem<
@@ -44,4 +46,10 @@ void UHeroEquippedGameplayAbility::Equipped(const FGameplayTag InTag, const FNam
 	{
 		InputSubSystem->AddMappingContext(WantEquipWeapon->WeaponData.WeaponInputMappingContext, 1);
 	}
+
+	IPawnUiInterface* UiCompInterface = Cast<IPawnUiInterface>(GetHeroCharacterFromActorInfo());
+	if (!UiCompInterface) { return; }
+	const auto HeroUIComp = UiCompInterface->GetHeroUIComponent();
+	if (!HeroUIComp) { return; }
+	HeroUIComp->OnEquippedWeaponDelegate.Broadcast(WantEquipWeapon->WeaponData.WeaponIcon);
 }

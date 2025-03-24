@@ -3,11 +3,14 @@
 
 #include "AbilitySystem/Abilities/HeroUnEquippedGameplayAbility.h"
 
+#include "Characters/WarriorCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/WarriorAbilitySysComp.h"
 #include "Component/Combat/HeroCombatComp.h"
 #include "Controllers/WarriorController.h"
 #include "Animation/Hero/WarriorHeroLinkedAnimLayer.h"
+#include "Component/UI/HeroUIComponent.h"
+#include "Interface/PawnUiInterface.h"
 #include "Items/Weapons/WarriorHeroWeapon.h"
 
 class UEnhancedInputLocalPlayerSubsystem;
@@ -45,4 +48,10 @@ void UHeroUnEquippedGameplayAbility::UnEquipped(const FGameplayTag& InTag, const
 
 	// 移除之前武器装备时赋予的默认能力
 	WantEquipWeapon->RemoveWeaponGrantedAbilities();
+
+	IPawnUiInterface* UiCompInterface = Cast<IPawnUiInterface>(GetHeroCharacterFromActorInfo());
+	if (!UiCompInterface) { return; }
+	const auto HeroUIComp = UiCompInterface->GetHeroUIComponent();
+	if (!HeroUIComp) { return; }
+	HeroUIComp->OnEquippedWeaponDelegate.Broadcast(nullptr);
 }
