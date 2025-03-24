@@ -7,6 +7,7 @@
 #include "Interface/CombatInterface.h"
 #include "EnemyCharacter.generated.h"
 
+class UWidgetComponent;
 class UEnemyUIComponent;
 class UEnemyCombatComp;
 /**
@@ -19,6 +20,7 @@ class RPGWARRIOR_API AEnemyCharacter : public AWarriorCharacterBase, public ICom
 
 public:
 	AEnemyCharacter();
+	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
 
 	TObjectPtr<UEnemyCombatComp> GetEnemyCombatComp() { return EnemyCombatComp; }
@@ -29,7 +31,8 @@ public:
 	//~ End CombatInterface
 
 	//~ Begin IPawnUiInterface 
-	virtual UPawnUIComponent* GetPawnUIComponent() override;
+	virtual UPawnUIComponent*  GetPawnUIComponent() override;
+	virtual UEnemyUIComponent* GetEnemyUIComponent() override;
 	//~ End IPawnUiInterface
 
 protected:
@@ -38,6 +41,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components|UI")
 	TObjectPtr<UEnemyUIComponent> EnemyUIComponent{};
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components|UI")
+	TObjectPtr<UWidgetComponent> EnemyHealthWidgetComp{};
 
 private:
 	/// 特效完成时才死亡
