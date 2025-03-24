@@ -18,6 +18,9 @@ class RPGWARRIOR_API UDataAssetHeroStartup : public UDataAssetStartUp
 
 public:
 	// 英雄角色的初始技能,默认会给予时不会触发
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta=(TitleProperty="InputTag"))
+	UPROPERTY(EditDefaultsOnly,
+		BlueprintReadWrite,
+		DisplayName="Activate on Given Abilities",
+		meta=(TitleProperty="InputTag"))
 	TArray<FWarriorHeroAbilityStruct> HeroStartupAbilities{};
 };

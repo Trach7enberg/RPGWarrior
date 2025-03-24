@@ -11,10 +11,7 @@
 #include "CoreTypes/GlobalGameplayTags.h"
 #include "FunctionLibrary/WarriorFunctionLibrary.h"
 
-UWarriorAttributeSet::UWarriorAttributeSet()
-{
-	
-}
+UWarriorAttributeSet::UWarriorAttributeSet() {}
 
 void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
@@ -38,18 +35,16 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 		SetCurrentHealth(NewHealth);
 
 
-		if (FMath::IsNearlyEqual(NewHealth, 0.f))
+		if (FMath::IsNearlyEqual(GetCurrentHealth(), 0.f))
 		{
 			if (const auto ThisSuffer = Cast<AWarriorCharacterBase>(Data.Target.GetAvatarActor()))
 			{
 				const auto EnemyOrPlayer = Cast<AEnemyCharacter>(ThisSuffer);
 				UWarriorFunctionLibrary::AddGameplayTagToActor(ThisSuffer,
-													   (EnemyOrPlayer)
-														   ? WarriorGameplayTags::Enemy_EventTag_Death
-														   : WarriorGameplayTags::Player_EventTag_Death);
-				
+				                                               (EnemyOrPlayer)
+					                                               ? WarriorGameplayTags::Enemy_EventTag_Death
+					                                               : WarriorGameplayTags::Player_EventTag_Death);
 			}
 		}
 	}
 }
-
