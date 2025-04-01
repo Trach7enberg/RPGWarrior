@@ -9,12 +9,16 @@
 #include "Component/Combat/PawnCombatComp.h"
 #include "CoreTypes/GlobalGameplayTags.h"
 
-UPawnCombatComp* UGameplayAbilityBase::GetPawnCombatCompFromActorInfo() const
+UPawnCombatComp* UGameplayAbilityBase::GetPawnCombatCompFromActorInfo()
 {
 	if (!GetAvatarActorFromActorInfo()) { return nullptr; }
 
-	// TODO 注意如果有多个相同的组件、可能不会按照预期作用 
-	return GetAvatarActorFromActorInfo()->GetComponentByClass<UPawnCombatComp>();
+	if (!OwningPawnCombatComp.IsValid())
+	{
+		// TODO 注意如果有多个相同的组件、可能不会按照预期作用 
+		OwningPawnCombatComp = GetAvatarActorFromActorInfo()->GetComponentByClass<UPawnCombatComp>();
+	}
+	return OwningPawnCombatComp.Get();
 }
 
 UWarriorAbilitySysComp* UGameplayAbilityBase::GetWarriorAbilitySysComp() const
@@ -71,6 +75,8 @@ FGameplayEffectSpecHandle UGameplayAbilityBase::MakeDamageEffectSpecHandle(
 	ContextHandle.AddSourceObject(GetAvatarActorFromActorInfo());
 	ContextHandle.AddInstigator(GetAvatarActorFromActorInfo(), GetAvatarActorFromActorInfo());
 	auto EffectSpecHandle = GetWarriorAbilitySysComp()->MakeOutgoingSpec(GeClass, GetAbilityLevel(), ContextHandle);
+
+	// SetByCallerTag 供自定义计算时获取使用
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpecHandle,
 	                                                              WarriorGameplayTags::Shared_SetByCaller_BaseDamage,
 	                                                              InWeaponBaseDamage);
@@ -119,4 +125,12 @@ UAnimMontage* UGameplayAbilityBase::GetRandomMontage(const TArray<UAnimMontage*>
 	ensure(!InMontages.IsEmpty());
 
 	return InMontages.IsEmpty() ? nullptr : InMontages[FMath::RandRange(0, InMontages.Num() - 1)];
+}
+
+float UGameplayAbilityBase::GetWeaponBaseDamage()
+{
+	if (!GetPawnCombatCompFromActorInfo()) { return 0.f; }
+
+
+	return GetPawnCombatCompFromActorInfo()->GetCurrentEquippedWeaponDamage(GetAbilityLevel());
 }

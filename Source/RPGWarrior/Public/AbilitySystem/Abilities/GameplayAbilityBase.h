@@ -29,11 +29,17 @@ class RPGWARRIOR_API UGameplayAbilityBase : public UGameplayAbility
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="WarriorAbility")
-	UPawnCombatComp* GetPawnCombatCompFromActorInfo() const;
+	UPawnCombatComp* GetPawnCombatCompFromActorInfo() ;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="WarriorAbility")
 	UWarriorAbilitySysComp* GetWarriorAbilitySysComp() const;
 
+	/// 制作 Damage GE
+	/// @param GeClass 
+	/// @param InCurrentAttackTypeTag 
+	/// @param InComboCount 
+	/// @param InWeaponBaseDamage 
+	/// @return 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="WarriorAbility")
 	virtual FGameplayEffectSpecHandle MakeDamageEffectSpecHandle(const TSubclassOf<UGameplayEffect>& GeClass,
 	                                                             const FGameplayTag InCurrentAttackTypeTag,
@@ -52,8 +58,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category="WarriorAbility")
 	virtual void SetHitReactScalarParameterOnMaterials(FName InParameterName, float InParameterValue);
 
+	/// 获取随机蒙太奇动画
+	/// @param InMontages 
+	/// @return 
 	UFUNCTION(BlueprintCallable, Category="WarriorAbility")
 	virtual UAnimMontage* GetRandomMontage(const TArray<UAnimMontage*>& InMontages) const;
+
+	/// 获取当前Owner的Combat组件并返回当前装备武器的基础伤害
+	/// @return 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="WarriorAbility")
+	float GetWeaponBaseDamage();
 
 protected:
 	//~ Begin UGameAbility Interface
@@ -70,4 +84,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="WarriorAbility")
 	EWarriorAbilityActivationPolicy AbilityActivationPolicy = EWarriorAbilityActivationPolicy::OnTriggered;
+
+private:
+	UPROPERTY()
+	TWeakObjectPtr<UPawnCombatComp> OwningPawnCombatComp{};
 };
