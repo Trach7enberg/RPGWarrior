@@ -26,8 +26,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category="CombatComp")
 	virtual void EnableCombatDetect(bool bShouldEnable) = 0;
 
-	/// 敌人死亡
+	/// 执行死亡
 	/// 
 	UFUNCTION(BlueprintCallable, Category="CombatComp")
-	virtual void EnemyDied() = 0;
+	virtual void Died() = 0;
+
+	UFUNCTION(BlueprintCallable, Category="CombatComp")
+	virtual bool IsDead() = 0;
+
+	UFUNCTION(BlueprintCallable, Category="CombatComp")
+	virtual void UpdateMotionWarpingTarget(FVector  InTargetLoc,
+	                                       FRotator InRotator,
+	                                       FName    InWarpTargetName = FName("FacingTarget")) = 0;
+
+	/// 显示当前角色的被锁定时的指示器
+	/// @param bEnable 
+	UFUNCTION(BlueprintCallable, Category="CombatComp")
+	virtual void ShowCurrentLockIndicator(bool bEnable = true) = 0;
 };
