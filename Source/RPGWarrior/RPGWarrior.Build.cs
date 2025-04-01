@@ -12,7 +12,8 @@ public class RPGWarrior : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", "CoreUObject", "UMG", "Slate", "SlateCore", "Engine", "InputCore", "EnhancedInput",
-			"GameplayTags", "GameplayTasks", "GameplayAbilities", "Niagara", "AIModule"
+			"GameplayTags", "GameplayTasks", "GameplayAbilities", "Niagara", "AIModule", "AnimGraphRuntime",
+			"MotionWarping"
 		});
 
 
