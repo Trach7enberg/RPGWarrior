@@ -10,8 +10,8 @@ namespace RPGWarriorDebug
 {
 	static void Print(
 		const FString&            Msg,
-		const FColor&             Color           = FColor::MakeRandomColor(),
 		const int32               InKey           = -1,
+		const FColor&             Color           = FColor::MakeRandomColor(),
 		const float               InTimeToDisplay = 4.f,
 		const ELogVerbosity::Type InLogLevel      = ELogVerbosity::Warning)
 	{
